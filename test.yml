@@ -1,0 +1,10 @@
+test_name: "Login API Load Test"
+host: "https://httpbin.org"
+endpoint: "/post"
+method: "POST"
+payload:
+  username: "test_user"
+  password: "secret"
+users: 10
+spawn_rate: 5
+duration: 30
