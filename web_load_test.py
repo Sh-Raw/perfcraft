@@ -1,28 +1,19 @@
-import yaml
+from locust import HttpUser, task, between
+from utils.helpers import load_test_config
 
+class ConfigurableUser(HttpUser):
+    config = load_test_config()
 
+    wait_time = between(1, 3)
+    host = config.get("host")
 
+    @task
+    def run_custom_test(self):
+        method = self.config.get("method", "GET").upper()
+        endpoint = self.config.get("endpoint", "/")
+        payload = self.config.get("payload", {})
 
-def load_test_config(file_path):
-	with open(file_path, 'r') as f:
-		config =yaml.safe_load(f)
-	return config
-
-def main():
-    config = load_test_config("test.yml")
-
-    print("🚀 Test Configuration:")
-    print("----------------------")
-    print("Test Name:", config["test_name"])
-    print("Host:", config["host"])
-    print("Endpoint:", config["endpoint"])
-    print("Method:", config["method"])
-    print("Payload:", config["payload"])
-    print("Users:", config["users"])
-    print("Spawn Rate:", config["spawn_rate"])
-    print("Duration:", config["duration"], "seconds")
-
-if __name__ == "__main__":
-    main()
-
-	
+        if method == "GET":
+            self.client.get(endpoint)
+        elif method == "POST":
+            self.client.post(endpoint, json=payload)
