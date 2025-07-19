@@ -1,0 +1,11 @@
+test_name: "Registration API Load Test"
+host: "https://httpbin.org"
+endpoint: "/anything/register"
+method: "POST"
+payload:
+  email: "test@example.com"
+  username: "new_user"
+  password: "new_secret"
+users: 20
+spawn_rate: 4
+duration: 40
