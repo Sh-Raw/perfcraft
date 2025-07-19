@@ -2,7 +2,7 @@ from locust import HttpUser, task, between
 from utils.helpers import load_test_config
 
 class LoginUser(HttpUser):
-    config = load_test_config("configs/test.yml")
+    config = load_test_config("configs/test.yaml")
 
     host = config.get("host")  # dynamically set base host
     wait_time = between(1, 3)
