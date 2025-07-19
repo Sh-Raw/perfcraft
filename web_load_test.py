@@ -1,21 +1,25 @@
 from locust import HttpUser, task, between
 from utils.helpers import load_test_config
 
-class LoginUser(HttpUser):
+class UserFlow(HttpUser):
     config = load_test_config("configs/test.yaml")
-
-    host = config.get("host")  # dynamically set base host
-    wait_time = between(1, 3)
+    host = config["host"]
+    wait_time = between(1, 2)
 
     @task
-    def login(self):
-        endpoint = self.config.get("endpoint", "/post")
-        method = self.config.get("method", "POST").upper()
-        payload = self.config.get("payload", {})
+    def user_flow(self):
+        # Step 1: Register
+        reg = self.config["scenarios"]["register"]
+        self.client.post(reg["endpoint"], json=reg["payload"])
 
-        if method == "POST":
-            with self.client.post(endpoint, json=payload, catch_response=True) as response:
-                if response.status_code == 200:
-                    response.success()
-                else:
-                    response.failure(f"Unexpected status code: {response.status_code}")
+        # Step 2: Login
+        login = self.config["scenarios"]["login"]
+        with self.client.post(login["endpoint"], json=login["payload"], catch_response=True) as response:
+            if response.status_code == 200:
+                response.success()
+            else:
+                response.failure("Login failed")
+
+        # Step 3: Get profile
+        get = self.config["scenarios"]["get_profile"]
+        self.client.get(get["endpoint"])
