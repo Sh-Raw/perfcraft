@@ -1,5 +1,10 @@
 test_name: "User Flow Load Test"
 host: "https://reqres.in"
+
+headers:
+  x-api-key: "reqres-free-v1"
+  Content-Type: "application/json"
+
 scenarios:
   register:
     endpoint: "/api/register"
