@@ -1,6 +1,6 @@
 import yaml
 
-def load_test_config(file_path="configs/test.yml"):
+def load_test_config(file_path="configs/test.yaml"):
     """
     Load test configuration from a YAML file.
 
