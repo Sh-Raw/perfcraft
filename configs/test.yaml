@@ -1,0 +1,24 @@
+test_name: "User Flow Load Test"
+host: "https://reqres.in"
+scenarios:
+  register:
+    endpoint: "/api/register"
+    method: "POST"
+    payload:
+      email: "eve.holt@reqres.in"
+      password: "pistol"
+
+  login:
+    endpoint: "/api/login"
+    method: "POST"
+    payload:
+      email: "eve.holt@reqres.in"
+      password: "cityslicka"
+
+  get_profile:
+    endpoint: "/api/users/2"
+    method: "GET"
+
+users: 5
+spawn_rate: 2
+duration: 20
